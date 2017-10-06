@@ -3,8 +3,12 @@ fastlane_version "2.60.1"
 # disable crash reporting
 opt_out_crash_reporting
 
-import "../utils/xcode_project_modify.rb"
+# import utils
+Dir.glob('../utils/*.rb').each do |item|
+	import item
+end
 
+# import lanes from all channels
 Dir.glob('../channels/*.rb').each do |item|
 	import item
 end

@@ -1,6 +1,3 @@
-# used for fastlane only
-
-require 'xcodeproj'
 
 def set_info_plist_value(path, key, value)
 	sh "/usr/libexec/PlistBuddy -c \"set :#{key} #{value}\" #{path}"
@@ -8,8 +5,8 @@ end
 
 # CFBundleShortVersionString e.g. 1.0.1
 # CFBundleVersion e.g. 1001
-private_lane :set_version_build do |params|
-	FastlaneCore::PrintTable.print_values(config: params, title: "Summary for set_version_build")
+private_lane :set_build_version do |params|
+	FastlaneCore::PrintTable.print_values(config: params, title: "Summary for set_build_version")
 	plist = params[:plist]
 	build_version = params[:build_version]
 	build_number = params[:build_number]
