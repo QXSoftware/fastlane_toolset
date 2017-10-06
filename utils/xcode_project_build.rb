@@ -1,3 +1,13 @@
+#
+# export_method options:
+# => app-store
+# => ad-hoc
+# => development
+#
+# codeSignIdentity options:
+# => iPhone Developer (development)
+# => iPhone Distribution (app-store & ad-hoc)
+#
 
 private_lane :update_settings_and_build do |params|
 	if not check_params(params,
@@ -11,6 +21,8 @@ private_lane :update_settings_and_build do |params|
 		:mobileProvisionFile,
 		:build_number,
 		:build_version,
+		:export_method,
+		:ipa_path,
 	) then
 		FastlaneCore::UI.user_error!("Not enough parameters passed to update_settings_and_build")
 	end
@@ -25,6 +37,8 @@ private_lane :update_settings_and_build do |params|
 	mobileProvisionFile = params[:mobileProvisionFile]
 	build_number = params[:build_number]
 	build_version = params[:build_version]
+	export_method = params[:export_method]
+	ipa_path = params[:ipa_path]
 
 	set_xcode_project_settings(
 		xcodeproj:xcodeproj,
@@ -44,5 +58,14 @@ private_lane :update_settings_and_build do |params|
 		build_number:build_number,
 		build_version:build_version,
 	)
-	gym
+	gym(
+		project:xcodeproj,
+		export_method:export_method,
+		output_directory:File.dirname(ipa_path),
+		output_name:File.basename(ipa_path, '.ipa'),
+		clean:true,
+		include_symbols:false,
+		include_bitcode:false,
+
+	)
 end
