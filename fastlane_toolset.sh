@@ -6,14 +6,18 @@ export FASTLANE_SKIP_UPDATE_CHECK=1
 # to use /usr/local/bin/fastlane
 export PATH=/usr/local/bin/:${PATH}
 
+lane=''
 xcodeproj=''
 plist=''
 build_number=''
 build_version=''
 ipa_path=''
 
-while getopts "x:p:n:v:o:" opt; do
+while getopts "l:x:p:n:v:o:" opt; do
 	case $opt in
+		l)
+			lane=$OPTARG
+			;;
 		x)
 			xcodeproj=$OPTARG
 			;;
@@ -34,6 +38,18 @@ while getopts "x:p:n:v:o:" opt; do
 			;;
 	esac
 done
+
+function ShowUsage
+{
+	echo "$0 -l lane -x xcodeproj -p plist -n build_number -v build_version -o ipa_path"
+}
+
+if [[ ${lane} == '' || ${xcodeproj} == '' || \
+	${plist} == '' || build_number == '' || \
+	build_version == '' || ipa_path == '' ]] ; then
+	ShowUsage
+	exit -1
+fi
 
 fastlane ${lane} \
 	xcodeproj:${xcodeproj} \
